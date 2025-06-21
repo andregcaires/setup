@@ -53,6 +53,9 @@ install_through_online_scripts() {
     else
         echo "rustup was found"
     fi
+
+    # VS Code extensions 
+    curl -fsSL https://raw.githubusercontent.com/andregcaires/setup/refs/heads/master/vscode-setup.sh | bash 
 }
 
 echo "Starting setup..."

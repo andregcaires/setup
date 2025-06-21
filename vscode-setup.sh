@@ -21,5 +21,11 @@ install_python_extensions() {
     done
 }
 
-install_java_extensions
-install_python_extensions
+if ! command -v code --version >/dev/null 2>&1
+then
+    echo "vscode was not found"
+else
+    install_java_extensions
+    install_python_extensions
+fi
+

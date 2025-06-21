@@ -41,7 +41,7 @@ install_through_online_scripts() {
     ## FNM 
     if ! command -v fnm --version >/dev/null 2>&1
     then
-    	curl -fsSL https://fnm.vercel.app/install | bash ## deu ruim
+    	curl -fsSL https://fnm.vercel.app/install | bash 
     else
         echo "fnm was found"
     fi

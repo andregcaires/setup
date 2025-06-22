@@ -4,6 +4,7 @@ code --install-extension pomdtr.excalidraw-editor
 code --install-extension ms-vscode-remote.vscode-remote-extensionpack
 code --install-extension figma.figma-vscode-extension
 code --install-extension alefragnani.project-manager
+code --install-extension eamodio.gitlens
 
 # Java / Spring 
 install_java_extensions() {

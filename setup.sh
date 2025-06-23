@@ -76,6 +76,14 @@ install_through_online_scripts() {
     curl -fsSL https://raw.githubusercontent.com/andregcaires/setup/refs/heads/master/vscode-setup.sh | bash 
 }
 
+show_title() {
+    echo " __     __   ____ _  _ "
+    echo "(  )   /__\ (_   | \/ )"
+    echo " )(__ /(__)\ / /_ \  / "
+    echo "(____|__)(__|____)(__) "
+    echo 
+}
+
 show_menu() {
     echo -e "Linux software setup for any lazy-ass individual"
     echo -e "Use the -h flag to view the options"
@@ -92,6 +100,8 @@ show_help() {
     echo "  -h | --help         Show help menu (you're here)"
     echo
 }
+
+show_title
 
 if [ $# -eq 0 ]
 then

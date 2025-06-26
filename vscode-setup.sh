@@ -59,12 +59,61 @@ install_python_extensions() {
     install_common_extensions $CURRENT_PROFILE
 }
 
-if ! command -v code >/dev/null 2>&1
-then
-    echo "vscode was not found"
-else
-    install_common_extensions
-    install_java_extensions
-    install_python_extensions
-fi
+show_help() {
+    echo "Use: source vscode-setup.sh [options]"
+    echo
+    echo "Available options:"
+    echo "  -a | --all          Install all profile extensions"
+    echo "  -h | --help         Show help menu (you're here)"
+    echo "  -c | --common       Install common extensions in the Default profile"
+    echo "  -p | --python       Install Python profile extensions"
+    echo "  -j | --java         Install Java profile extensions"
+    echo
+}
 
+show_menu() {
+    echo -e "Linux software setup for any lazy-ass individual"
+    echo -e "Use the -h flag to view the options"
+}
+
+show_title() {
+    echo " __     __   ____ _  _ "
+    echo "(  )   /__\ (_   | \/ )"
+    echo " )(__ /(__)\ / /_ \  / "
+    echo "(____|__)(__|____)(__) "
+    echo 
+}
+
+show_title
+
+if [ $# -eq 0 ]
+then
+    show_menu
+else
+    for arg in "$@"; do
+        case $arg in
+            -a|--all)
+            install_common_extensions
+            install_java_extensions
+            install_python_extensions
+            ;;
+            -h|--help)
+            show_help
+            ;;
+            -c|--common)
+            install_common_extensions
+            ;;
+            -p|--python)
+            install_common_extensions
+            install_python_extensions
+            ;;
+            -j|--java)
+            install_common_extensions
+            install_java_extensions
+            ;;
+            *)
+            echo "Invalid argument: $arg"
+            ;;
+        esac
+    done
+fi

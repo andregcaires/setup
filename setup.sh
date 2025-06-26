@@ -1,7 +1,7 @@
 #!/bin/bash
 
 
-package_list=("sudo" "curl" "git" "firefox" "zip" "unzip")
+package_list=("sudo" "curl" "git" "zip" "unzip")
 
 install_via_apt() {
     echo "installing via apt"
@@ -39,6 +39,25 @@ install_via_apt() {
         echo "microsoft-edge-stable was found"
     fi
 
+    ## web app manager 
+    if ! command -v webapp-manager >/dev/null 2>&1
+    then
+        sudo add-apt-repository ppa:kelebek333/mint-tools
+        sudo apt update && sudo apt install python3-gi-cairo webapp-manager
+    else
+        echo "webapp-manager was found"
+    fi
+
+    ## google chrome
+    if ! command -v google-chrome-stable >/dev/null 2>&1
+    then
+        wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - 
+        sudo sh -c 'echo "deb https://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+        sudo apt-get update
+        sudo apt-get install google-chrome-stable
+    else
+        echo "google-chrome-stable was found"
+    fi
 }
 
 install_via_pacman() {
@@ -47,6 +66,8 @@ install_via_pacman() {
     for package in ${package_list[@]}; do
         pacman -S $package
     done
+
+    pacman -S firefox
 }
 
 install_os_specific_apps() {
@@ -86,7 +107,7 @@ install_through_online_scripts() {
     fi
 
     # VS Code extensions 
-    curl -fsSL https://raw.githubusercontent.com/andregcaires/setup/refs/heads/master/vscode-setup.sh | bash 
+    #curl -fsSL https://raw.githubusercontent.com/andregcaires/setup/refs/heads/master/vscode-setup.sh | bash 
 }
 
 show_title() {

@@ -100,6 +100,8 @@ install_through_online_scripts() {
     if ! command -v rustup --version >/dev/null 2>&1
     then
     	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+        . "$HOME/.cargo/env"  
+        sudo apt install build-essential -y
     else
         echo "rustup was found"
     fi

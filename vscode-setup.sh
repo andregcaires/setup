@@ -9,12 +9,12 @@ install_common_extensions() {
         eamodio.gitlens
     )
     if [ $# -eq 0 ]; then
-        echo "Instaling common extensions"
+        echo "Instaling common extensions for the Default profile"
         for extension in "${extension_list[@]}"; do
             code --install-extension $extension
         done
     else 
-        echo "Instaling common extensions for $1 profile"
+        echo "Instaling common extensions for the $1 profile"
         for extension in "${extension_list[@]}"; do
             code --install-extension $extension --profile $1
         done
@@ -65,7 +65,7 @@ show_help() {
     echo "Available options:"
     echo "  -a | --all          Install all profile extensions"
     echo "  -h | --help         Show help menu (you're here)"
-    echo "  -c | --common       Install common extensions in the Default profile"
+    echo "  -d | --default      Install common extensions in the Default profile"
     echo "  -p | --python       Install Python profile extensions"
     echo "  -j | --java         Install Java profile extensions"
     echo
@@ -100,15 +100,13 @@ else
             -h|--help)
             show_help
             ;;
-            -c|--common)
+            -d|--default)
             install_common_extensions
             ;;
             -p|--python)
-            install_common_extensions
             install_python_extensions
             ;;
             -j|--java)
-            install_common_extensions
             install_java_extensions
             ;;
             *)

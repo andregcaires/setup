@@ -56,6 +56,21 @@ install_via_apt() {
     else
         echo "google-chrome-stable was found"
     fi
+
+    ## python 
+    if ! command -v python3 >/dev/null 2>&1
+    then
+        sudo apt install python3 -y
+    else
+        echo "python3 was found"
+    fi
+
+    if ! command -v pip >/dev/null 2>&1
+    then
+        sudo apt install python3-pip python3-venv -y
+    else
+        echo "pip was found"
+    fi
 }
 
 install_via_pacman() {

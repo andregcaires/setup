@@ -59,6 +59,22 @@ install_python_extensions() {
     install_common_extensions $CURRENT_PROFILE
 }
 
+# Rust
+install_rust_extensions() {
+    CURRENT_PROFILE=Rust
+    code --profile $CURRENT_PROFILE
+    
+    echo "Instaling ${CURRENT_PROFILE} extensions"
+    extension_list=(
+        "rust-lang.rust-analyzer"
+    )
+    for extension in "${extension_list[@]}"; do
+        code --install-extension $extension --profile $CURRENT_PROFILE
+    done
+
+    install_common_extensions $CURRENT_PROFILE
+}
+
 show_help() {
     echo "Use: source vscode-setup.sh [options]"
     echo
@@ -68,6 +84,7 @@ show_help() {
     echo "  -d | --default      Install common extensions in the Default profile"
     echo "  -p | --python       Install Python profile extensions"
     echo "  -j | --java         Install Java profile extensions"
+    echo "  -r | --rust         Install Rust profile extensions"
     echo
 }
 
@@ -108,6 +125,9 @@ else
             ;;
             -j|--java)
             install_java_extensions
+            ;;
+            -r|--rust)
+            install_rust_extensions
             ;;
             *)
             echo "Invalid argument: $arg"

@@ -14,7 +14,7 @@ install_flatpak() {
 
 install_flatpak_apps() {
 
-    flatpak install com.spotify.Client com.getpostman.Postman -y
+    flatpak install com.spotify.Client com.getpostman.Postman com.valvesoftware.Steam -y
 }
 
 install_flatpak

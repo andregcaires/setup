@@ -80,7 +80,7 @@ install_via_pacman() {
         pacman -S $package
     done
 
-    pacman -S firefox
+    pacman -S firefox openssh base-devel 
 }
 
 install_os_specific_apps() {

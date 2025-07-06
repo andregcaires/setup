@@ -7,6 +7,7 @@ install_common_extensions() {
         figma.figma-vscode-extension 
         alefragnani.project-manager 
         eamodio.gitlens
+        quicktype.quicktype
     )
     if [ $# -eq 0 ]; then
         echo "Instaling common extensions for the Default profile"
@@ -75,6 +76,24 @@ install_rust_extensions() {
     install_common_extensions $CURRENT_PROFILE
 }
 
+# Go
+install_go_extensions() {
+    CURRENT_PROFILE=Go
+    code --profile $CURRENT_PROFILE
+    
+    echo "Instaling ${CURRENT_PROFILE} extensions"
+    extension_list=(
+        "golang.go"
+        "tooltitudeteam.tooltitude"
+        "premparihar.gotestexplorer"
+    )
+    for extension in "${extension_list[@]}"; do
+        code --install-extension $extension --profile $CURRENT_PROFILE
+    done
+
+    install_common_extensions $CURRENT_PROFILE
+}
+
 show_help() {
     echo "Use: source vscode-setup.sh [options]"
     echo
@@ -85,6 +104,7 @@ show_help() {
     echo "  -p | --python       Install Python profile extensions"
     echo "  -j | --java         Install Java profile extensions"
     echo "  -r | --rust         Install Rust profile extensions"
+    echo "  -g | --go           Install Go profile extensions"
     echo
 }
 
@@ -113,6 +133,8 @@ else
             install_common_extensions
             install_java_extensions
             install_python_extensions
+            install_rust_extensions
+            install_go_extensions
             ;;
             -h|--help)
             show_help
@@ -128,6 +150,9 @@ else
             ;;
             -r|--rust)
             install_rust_extensions
+            ;;
+            -g|--go)
+            install_go_extensions
             ;;
             *)
             echo "Invalid argument: $arg"

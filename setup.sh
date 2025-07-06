@@ -1,6 +1,6 @@
 #!/bin/bash
 
-package_list=("sudo" "curl" "git" "zip" "unzip" "wget" "gpg")
+package_list=("sudo" "curl" "git" "zip" "unzip" "wget" "gpg" "podman")
 
 install_via_apt() {
     echo "installing via apt"

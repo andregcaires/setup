@@ -238,27 +238,27 @@ else
     for arg in "$@"; do
         case $arg in
             -a|--all)
-            install_os_specific_apps
-            install_external_tools
+                install_os_specific_apps
+                install_external_tools
             ;;
             -h|--help)
-            show_help
+                show_help
             ;;
             -b|--basic)
-            install_os_specific_apps
+                install_os_specific_apps
             ;;
             -f|--flatpak)
-            install_flatpak
-            install_flatpak_apps
+                install_flatpak
+                install_flatpak_apps
             ;;
             -e|--external)
-            install_external_tools
+                install_external_tools
             ;;
             -p|--ppa)
-            install_through_ppas
+                install_through_ppas
             ;;
             *)
-            echo "Invalid argument: $arg"
+                echo "Invalid argument: $arg"
             ;;
         esac
     done

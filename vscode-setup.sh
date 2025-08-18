@@ -1,51 +1,48 @@
 #!/bin/bash
 
 install_common_extensions() {
+    CURRENT_EDITOR=$1
     extension_list=(
-        pomdtr.excalidraw-editor 
-        ms-vscode-remote.vscode-remote-extensionpack 
-        figma.figma-vscode-extension 
-        alefragnani.project-manager 
         eamodio.gitlens
         quicktype.quicktype
+        ms-vscode-remote.remote-containers
     )
-    if [ $# -eq 0 ]; then
+    if [ $# -eq 1 ]; then
         echo "Instaling common extensions for the Default profile"
         for extension in "${extension_list[@]}"; do
-            code --install-extension $extension
+            $CURRENT_EDITOR --install-extension $extension
         done
     else 
-        echo "Instaling common extensions for the $1 profile"
+        echo "Instaling common extensions for the $2 profile"
         for extension in "${extension_list[@]}"; do
-            code --install-extension $extension --profile $1
+            $CURRENT_EDITOR --install-extension $extension --profile $2
         done
     fi
 }
 
 # Java / Spring 
 install_java_extensions() {
+    CURRENT_EDITOR=$1
     CURRENT_PROFILE=Java
-    code --profile $CURRENT_PROFILE
-    
-    echo "Instaling ${CURRENT_PROFILE} extensions"
     extension_list=(
         "vscjava.vscode-java-pack" 
         "vmware.vscode-boot-dev-pack" 
         "visualstudioexptteam.vscodeintellicode"
     )
+    
+    echo "Instaling ${CURRENT_PROFILE} extensions"
+    $CURRENT_EDITOR --profile $CURRENT_PROFILE
     for extension in "${extension_list[@]}"; do
-        code --install-extension $extension --profile $CURRENT_PROFILE
+        $CURRENT_EDITOR --install-extension $extension --profile $CURRENT_PROFILE
     done
 
-    install_common_extensions $CURRENT_PROFILE
+    install_common_extensions $CURRENT_EDITOR $CURRENT_PROFILE
 }
 
 # Python
 install_python_extensions() {
+    CURRENT_EDITOR=$1
     CURRENT_PROFILE=Python
-    code --profile $CURRENT_PROFILE
-    
-    echo "Instaling ${CURRENT_PROFILE} extensions"
     extension_list=(
         "visualstudioexptteam.vscodeintellicode-completions" 
         "ms-python.python" 
@@ -53,45 +50,50 @@ install_python_extensions() {
         "ms-python.vscode-pylance" 
         "visualstudioexptteam.vscodeintellicode"
     )
+    
+    echo "Instaling ${CURRENT_PROFILE} extensions"
+    $CURRENT_EDITOR --profile $CURRENT_PROFILE
     for extension in "${extension_list[@]}"; do
-        code --install-extension $extension --profile $CURRENT_PROFILE
+        $CURRENT_EDITOR --install-extension $extension --profile $CURRENT_PROFILE
     done
 
-    install_common_extensions $CURRENT_PROFILE
+    install_common_extensions $CURRENT_EDITOR $CURRENT_PROFILE
 }
 
 # Rust
 install_rust_extensions() {
+    CURRENT_EDITOR=$1
     CURRENT_PROFILE=Rust
-    code --profile $CURRENT_PROFILE
-    
-    echo "Instaling ${CURRENT_PROFILE} extensions"
     extension_list=(
         "rust-lang.rust-analyzer"
     )
+
+    echo "Instaling ${CURRENT_PROFILE} extensions"
+    $CURRENT_EDITOR --profile $CURRENT_PROFILE
     for extension in "${extension_list[@]}"; do
-        code --install-extension $extension --profile $CURRENT_PROFILE
+        $CURRENT_EDITOR --install-extension $extension --profile $CURRENT_PROFILE
     done
 
-    install_common_extensions $CURRENT_PROFILE
+    install_common_extensions $CURRENT_EDITOR $CURRENT_PROFILE
 }
 
 # Go
 install_go_extensions() {
+    CURRENT_EDITOR=$1
     CURRENT_PROFILE=Go
-    code --profile $CURRENT_PROFILE
-    
-    echo "Instaling ${CURRENT_PROFILE} extensions"
     extension_list=(
         "golang.go"
         "tooltitudeteam.tooltitude"
         "premparihar.gotestexplorer"
     )
+    
+    echo "Instaling ${CURRENT_PROFILE} extensions"
+    $CURRENT_EDITOR --profile $CURRENT_PROFILE
     for extension in "${extension_list[@]}"; do
-        code --install-extension $extension --profile $CURRENT_PROFILE
+        $CURRENT_EDITOR --install-extension $extension --profile $CURRENT_PROFILE
     done
 
-    install_common_extensions $CURRENT_PROFILE
+    install_common_extensions $CURRENT_EDITOR $CURRENT_PROFILE
 }
 
 show_help() {
@@ -127,36 +129,46 @@ if [ $# -eq 0 ]
 then
     show_menu
 else
-    for arg in "$@"; do
-        case $arg in
-            -a|--all)
-            install_common_extensions
-            install_java_extensions
-            install_python_extensions
-            install_rust_extensions
-            install_go_extensions
-            ;;
-            -h|--help)
-            show_help
-            ;;
-            -d|--default)
-            install_common_extensions
-            ;;
-            -p|--python)
-            install_python_extensions
-            ;;
-            -j|--java)
-            install_java_extensions
-            ;;
-            -r|--rust)
-            install_rust_extensions
-            ;;
-            -g|--go)
-            install_go_extensions
-            ;;
-            *)
-            echo "Invalid argument: $arg"
-            ;;
-        esac
+    EDITORS=("codium" "code")
+    for EDITOR_BIN in "${EDITORS[@]}"; do
+        if command -v "$EDITOR_BIN" &> /dev/null; then
+            echo "Installing extensions for $EDITOR_BIN"
+                for arg in "$@"; do
+                    case $arg in
+                        -a|--all)
+                        install_common_extensions $EDITOR_BIN
+                        install_java_extensions $EDITOR_BIN
+                        install_python_extensions $EDITOR_BIN
+                        install_rust_extensions $EDITOR_BIN
+                        install_go_extensions $EDITOR_BIN
+                        ;;
+                        -h|--help)
+                        show_help
+                        ;;
+                        -d|--default)
+                        install_common_extensions $EDITOR_BIN
+                        ;;
+                        -p|--python)
+                        install_python_extensions $EDITOR_BIN
+                        ;;
+                        -j|--java)
+                        install_java_extensions $EDITOR_BIN
+                        ;;
+                        -r|--rust)
+                        install_rust_extensions $EDITOR_BIN
+                        ;;
+                        -g|--go)
+                        install_go_extensions $EDITOR_BIN
+                        ;;
+                        *)
+                        echo "Invalid argument: $arg"
+                        ;;
+                    esac
+                done
+        else
+            echo "$EDITOR_BIN not found"
+        fi
     done
+
+
 fi

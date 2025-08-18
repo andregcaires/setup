@@ -1,7 +1,6 @@
 #!/bin/bash
 
 ## TODO
-# decide between VS Code and VS Codium
 # add some dynamic versioning in Go installation
 
 set -e
@@ -68,60 +67,66 @@ install_os_specific_apps() {
 }
 
 install_through_ppas() {
-    ## google chrome
-    if ! command -v google-chrome-stable >/dev/null 2>&1
+
+    if command -v apt >/dev/null 2>&1
     then
-        wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - 
-        sudo sh -c 'echo "deb https://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
-        sudo apt-get update
-        sudo apt-get install google-chrome-stable
-    else
-        echo "google-chrome-stable was found"
-    fi
+        ## google chrome
+        if ! command -v google-chrome-stable >/dev/null 2>&1
+        then
+            wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add - 
+            sudo sh -c 'echo "deb https://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+            sudo apt-get update
+            sudo apt-get install google-chrome-stable
+        else
+            echo "google-chrome-stable was found"
+        fi
 
-    ## microsoft edge
-    if ! command -v microsoft-edge-stable >/dev/null 2>&1
-    then
-        curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
-        sudo install -o root -g root -m 644 microsoft.gpg /etc/apt/trusted.gpg.d/
-        sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main" > /etc/apt/sources.list.d/microsoft-edge-dev.list'
-        sudo rm microsoft.gpg
+        ## microsoft edge
+        if ! command -v microsoft-edge-stable >/dev/null 2>&1
+        then
+            curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg
+            sudo install -o root -g root -m 644 microsoft.gpg /etc/apt/trusted.gpg.d/
+            sudo sh -c 'echo "deb [arch=amd64] https://packages.microsoft.com/repos/edge stable main" > /etc/apt/sources.list.d/microsoft-edge-dev.list'
+            sudo rm microsoft.gpg
 
-        sudo apt update && sudo apt install microsoft-edge-stable
-    else
-        echo "microsoft-edge-stable was found"
-    fi
+            sudo apt update && sudo apt install microsoft-edge-stable
+        else
+            echo "microsoft-edge-stable was found"
+        fi
 
-    ## vscode
-    if ! command -v code >/dev/null 2>&1
-    then
-        wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
-        sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
-        echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" |sudo tee /etc/apt/sources.list.d/vscode.list > /dev/null
-        rm -f packages.microsoft.gpg
-        sudo apt install apt-transport-https -y
-        sudo apt update
-        sudo apt install code -y
-    else
-        echo "code was found"
-    fi
+        ## vscode
+        if ! command -v code >/dev/null 2>&1
+        then
+            wget -qO- https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > packages.microsoft.gpg
+            sudo install -D -o root -g root -m 644 packages.microsoft.gpg /etc/apt/keyrings/packages.microsoft.gpg
+            echo "deb [arch=amd64,arm64,armhf signed-by=/etc/apt/keyrings/packages.microsoft.gpg] https://packages.microsoft.com/repos/code stable main" |sudo tee /etc/apt/sources.list.d/vscode.list > /dev/null
+            rm -f packages.microsoft.gpg
+            sudo apt install apt-transport-https -y
+            sudo apt update
+            sudo apt install code -y
+        else
+            echo "code was found"
+        fi
 
-    ## docker
-    if ! command -v docker >/dev/null 2>&1
-    then
-        sudo apt install apt-transport-https ca-certificates curl software-properties-common -y
+        ## docker
+        if ! command -v docker >/dev/null 2>&1
+        then
+            sudo apt install apt-transport-https ca-certificates curl software-properties-common -y
 
-        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
-        echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+            curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+            echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
-        sudo apt update
-        sudo apt install docker-ce docker-ce-cli containerd.io -y
+            sudo apt update
+            sudo apt install docker-ce docker-ce-cli containerd.io -y
 
-        sudo groupadd docker
-        sudo usermod -aG docker $USER
-        newgrp docker # To activate the group change without logging out and in
-    else
-        echo "docker was found"
+            sudo groupadd docker
+            sudo usermod -aG docker $USER
+            newgrp docker # To activate the group change without logging out and in
+        else
+            echo "docker was found"
+        fi
+    else 
+        echo "apt not found"
     fi
 }
 

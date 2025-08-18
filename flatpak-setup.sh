@@ -13,7 +13,7 @@ install_flatpak() {
 
 install_flatpak_apps() {
 
-    flatpak install com.spotify.Client com.getpostman.Postman com.opera.Opera com.microsoft.Edge org.chromium.Chromium -y
+    flatpak install com.spotify.Client com.getpostman.Postman com.opera.Opera com.microsoft.Edge org.chromium.Chromium org.libreoffice.LibreOffice -y
 }
 
 install_flatpak

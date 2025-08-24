@@ -66,8 +66,7 @@ install_os_specific_apps() {
     fi
 }
 
-install_through_ppas() {
-
+install_web_browsers() {
     if command -v apt >/dev/null 2>&1
     then
         ## google chrome
@@ -93,7 +92,13 @@ install_through_ppas() {
         else
             echo "microsoft-edge-stable was found"
         fi
+    fi
+}
 
+install_through_ppas() {
+
+    if command -v apt >/dev/null 2>&1
+    then
         ## vscode
         if ! command -v code >/dev/null 2>&1
         then
@@ -196,7 +201,7 @@ install_flatpak() {
 
 install_flatpak_apps() {
 
-    flatpak install com.spotify.Client com.getpostman.Postman com.opera.Opera com.microsoft.Edge org.chromium.Chromium org.libreoffice.LibreOffice -y
+    flatpak install com.spotify.Client com.getpostman.Postman com.microsoft.Edge org.chromium.Chromium org.libreoffice.LibreOffice -y
 }
 
 show_title() {
@@ -221,7 +226,8 @@ show_help() {
     echo "                          Currently supported package managers: apt, pacman"
     echo "  -e | --external     Install external packages (FNM, SDKMAN, Rustup, Go)"
     echo "  -f | --flatpak      Install Flatpak and some Flatpaks"
-    echo "  -p | --ppa          Install external packages through PPAs"
+    echo "  -w | --web          Install Web Browsers (Google Chrome, Microsoft Edge)"
+    echo "  -p | --ppa          Install external packages through PPAs (VS Code, Docker)"
     echo "  -h | --help         Show help menu (you're here)"
     echo
 }
@@ -253,6 +259,9 @@ else
             ;;
             -e|--external)
                 install_external_tools
+            ;;
+            -w|--web)
+                install_web_browsers
             ;;
             -p|--ppa)
                 install_through_ppas
